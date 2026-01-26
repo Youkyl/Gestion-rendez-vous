@@ -1,0 +1,19 @@
+{
+  "name": "patient",
+  "version": "1.0.0",
+  "description": "Systeme de Gestion des Rendez vous patient",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Youkyl/Gestion-rendez-vous.git"
+  },
+  "license": "ISC",
+  "author": "Youan HOUNKPATIN",
+  "type": "commonjs",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "readline-sync": "^1.4.10"
+  }
+}
