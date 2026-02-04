@@ -1,4 +1,4 @@
-const { createPatient, createDemandeRDV, serchDemandeById, changeDemandeStatut, addAntecedent, completePatientInfo, registerPatient, registerDemandeRDV, connexion, viewDemandesRDV, viewPatientInfo, viewRDV } = require('./service');
+const { createPatient, createDemandeRDV, serchDemandeById, changeDemandeStatut, addAntecedent, completePatientInfo, registerPatient, registerDemandeRDV, connexion, getAllPatien, getAllDemande } = require('./service');
 
 const readlineSync = require('readline-sync');
 
@@ -22,10 +22,58 @@ function menuPrincipal(patient) {
     console.log ("8- Se deconnecter");
 }
 
+function viewDemandesRDV(demandes, patientId){
+    for(let i=0; i<demandes.length; i++){
+        if(demandes[i].patientId === patientId){
+            console.log("Demande ID:", demandes[i].id, "Specialite:", demandes[i].specialite, "Date de creation:", demandes[i].dateCreation, "Statut:", demandes[i].statut);
+        }
+    }
+}
+
+function viewRDV(rendezVous, patientId){
+    console.log("Vos rendez-vous:");
+    for(let i=0; i<rendezVous.length; i++){
+        if(rendezVous[i].patientId === patientId && rendezVous[i].statut === "accepte"){
+            console.log("Rendez-vous ID:", rendezVous[i].id, "Specialite:", rendezVous[i].specialite, "Date de creation:", rendezVous[i].dateCreation);
+        }
+    }
+}
+
+function viewPatientInfo(patient){
+    console.log("Informations du patient:");
+    console.log("Code patient:", patient.codePatient);
+    console.log("Nom:", patient.nom);
+    console.log("Prénom:", patient.prenom);
+    if (!patient.dateNaissance) {
+        console.log("Date de naissance: Non renseignée");
+    } else {
+        console.log("Date de naissance:", patient.dateNaissance);
+    }
+    if (!patient.adresse) {
+        console.log("Adresse: Non renseignée");
+    } else {
+        console.log("Adresse:", patient.adresse);
+    }
+    if (!patient.telephone) {
+        console.log("Téléphone: Non renseigné");
+    } else {
+    console.log("Téléphone:", patient.telephone);
+    }
+    console.log("Email:", patient.email);
+    console.log("Date de création du compte:", patient.dateCreationCompte);
+
+    if (!patient.antecedentsMedicaux || patient.antecedentsMedicaux.length === 0) {
+        console.log("Antécédents médicaux: Aucun");
+        return;
+    } else {
+    console.log("Antécédents médicaux:", patient.antecedentsMedicaux.join(", "));
+    }
+}
+
 function main() {
     let choixConnexion;
-    let patients = [];
-    let demandes = [];
+    let patients = getAllPatien();
+    let demandes = getAllDemande();
     do {
         menuConnexion();
         choixConnexion = readlineSync.question("Veuillez faire un choix: ");
@@ -40,7 +88,7 @@ function main() {
                 let password = readlineSync.question("Veuillez entrer votre mot de passe: ");
 
                 let newPatient = createPatient(nom, prenom, email, password);
-                registerPatient(patients, newPatient);
+                registerPatient(newPatient);
                 console.clear();
                 console.log("Compte Patient cree avec succes!");
                 console.log("Votre code patient est:", newPatient.codePatient);
@@ -50,7 +98,7 @@ function main() {
                 console.log("Connexion Patient");
                 let emailpatient = readlineSync.question("Veuillez entrer votre email: ");
                 let passwordPatient = readlineSync.question("Veuillez entrer votre mot de passe: ");
-                let patientConnect = connexion(patients, emailpatient, passwordPatient);
+                let patientConnect = connexion(emailpatient, passwordPatient);
                 if(patientConnect){
                     console.log("Connexion reussie!");
                     let choixPrincipal;
@@ -84,7 +132,7 @@ function main() {
                                 console.log("Faire une demande de rendez-vous");
                                 let specialite = readlineSync.question("Veuillez entrer la specialite medicale: ");
                                 let demande = createDemandeRDV(patientConnect.id, specialite);
-                                registerDemandeRDV(demandes, demande);
+                                registerDemandeRDV(demande);
                                 console.log("Demande de rendez-vous enregistree avec succes!");
                                 break;
                             case '5':
@@ -101,7 +149,7 @@ function main() {
                                 console.clear();
                                 console.log("Changer le statut d'une demande de rendez-vous");
                                 let demandeId = parseInt(readlineSync.question("Veuillez entrer l'ID de la demande de rendez-vous: "));
-                                let demandeTrouvee = serchDemandeById(demandes, demandeId);
+                                let demandeTrouvee = serchDemandeById(demandeId);
                                 let statut = readlineSync.question("Veuillez entrer le nouveau statut (accepte/refuse/en attente): ");
                                 if (demandeTrouvee) {
                                     changeDemandeStatut(demandeTrouvee, statut);
