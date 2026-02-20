@@ -1,5 +1,10 @@
+import { StorageModel } from './StorageModel.js';
+
 let patients = [];
 let demandes = [];
+
+const patientStorage = new StorageModel('patients');
+const demandeStorage = new StorageModel('demandes');
 
 export function connexion(email, password){
     for(let i=0; i<patients.length; i++){
@@ -22,6 +27,8 @@ export function createPatient(nom, prenom, email, password){
     patient.email = email;
     patient.password = password;
 
+    registerPatient(patient);
+
     return patient;
 }
 
@@ -36,11 +43,11 @@ export function createDemandeRDV(patientId, specialite){
 }
 
 export function registerPatient(patient){
-    patients.push(patient);
+    patientStorage.addItem(patient);
 }
 
 export function registerDemandeRDV(demande){
-    demandes.push(demande);
+    demandeStorage.addItem(demande);
 }
 
 export function addAntecedent(patient, antecedent){

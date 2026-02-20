@@ -1,6 +1,6 @@
 import { createPatient, createDemandeRDV, serchDemandeById, changeDemandeStatut, addAntecedent, completePatientInfo, registerPatient, registerDemandeRDV, connexion, getAllPatien, getAllDemande } from './service.js';
 
-import readlineSync from 'readline-sync';
+//import readlineSync from 'readline-sync';
 
 function menuConnexion() {
     console.log ("Bienvenue dans le gestionnaire de Rendez-vous Patient");
@@ -76,19 +76,28 @@ export function main() {
     let demandes = getAllDemande();
     do {
         menuConnexion();
-        choixConnexion = readlineSync.question("Veuillez faire un choix: ");
+
+        choixConnexion = prompt("Veuillez faire un choix: ");
+
+        // choixConnexion = readlineSync.question("Veuillez faire un choix: ");
+
         switch (choixConnexion) {
             case '1':
                 console.clear(); 
                 console.log("Creation de compte Patient");
 
-                let nom = readlineSync.question("Veuillez entrer votre nom: ");
-                let prenom = readlineSync.question("Veuillez entrer votre prenom: ");
-                let email = readlineSync.question("Veuillez entrer votre email: ");
-                let password = readlineSync.question("Veuillez entrer votre mot de passe: ");
+                let nom = prompt("Veuillez entrer votre nom: ");
+                let prenom = prompt("Veuillez entrer votre prenom: ");
+                let email = prompt("Veuillez entrer votre email: ");
+                let password = prompt("Veuillez entrer votre mot de passe: ");
+
+                // let nom = readlineSync.question("Veuillez entrer votre nom: ");
+                // let prenom = readlineSync.question("Veuillez entrer votre prenom: ");
+                // let email = readlineSync.question("Veuillez entrer votre email: ");
+                // let password = readlineSync.question("Veuillez entrer votre mot de passe: ");
 
                 let newPatient = createPatient(nom, prenom, email, password);
-                registerPatient(newPatient);
+                //registerPatient(newPatient);
                 console.clear();
                 console.log("Compte Patient cree avec succes!");
                 console.log("Votre code patient est:", newPatient.codePatient);
@@ -96,24 +105,38 @@ export function main() {
             case '2':
                 console.clear(); 
                 console.log("Connexion Patient");
-                let emailpatient = readlineSync.question("Veuillez entrer votre email: ");
-                let passwordPatient = readlineSync.question("Veuillez entrer votre mot de passe: ");
+
+                let emailpatient = prompt("Veuillez entrer votre email: ");
+                let passwordPatient = prompt("Veuillez entrer votre mot de passe: ");
+
+                // let emailpatient = readlineSync.question("Veuillez entrer votre email: ");
+                // let passwordPatient = readlineSync.question("Veuillez entrer votre mot de passe: ");
+
                 let patientConnect = connexion(emailpatient, passwordPatient);
                 if(patientConnect){
                     console.log("Connexion reussie!");
                     let choixPrincipal;
                     do {
                         menuPrincipal(patientConnect);
-                        choixPrincipal = readlineSync.question("Veuillez faire un choix: ");
+
+                        choixPrincipal = prompt("Veuillez faire un choix: ");
+
+                        // choixPrincipal = readlineSync.question("Veuillez faire un choix: ");
+
                         switch (choixPrincipal) {
                             case '1':
                                 console.clear();
                                 
                                 console.log("Ajouter des informations personnelles pour le patient:", patientConnect.nom, patientConnect.prenom); 
 
-                                let dateNaissance = readlineSync.question("Veuillez entrer votre date de naissance (JJ/MM/AAAA): ");
-                                let adresse = readlineSync.question("Veuillez entrer votre adresse: ");
-                                let telephone = readlineSync.question("Veuillez entrer votre numero de telephone: ");
+                                let dateNaissance = prompt("Veuillez entrer votre date de naissance (JJ/MM/AAAA): ");
+                                let adresse = prompt("Veuillez entrer votre adresse: ");
+                                let telephone = prompt("Veuillez entrer votre numero de telephone: ");
+
+                                // let dateNaissance = readlineSync.question("Veuillez entrer votre date de naissance (JJ/MM/AAAA): ");
+                                // let adresse = readlineSync.question("Veuillez entrer votre adresse: ");
+                                // let telephone = readlineSync.question("Veuillez entrer votre numero de telephone: ");
+
                                 completePatientInfo(patientConnect, dateNaissance, adresse, telephone);
                                 break; 
                             case '2':
@@ -124,13 +147,21 @@ export function main() {
                             case '3':
                                 console.clear();
                                 console.log("Ajouter des antecedents medicaux");
-                                let antecedent = readlineSync.question("Veuillez entrer un antecedent medical: ");
+
+                                let antecedent = prompt("Veuillez entrer un antecedent medical: ");
+
+                                // let antecedent = readlineSync.question("Veuillez entrer un antecedent medical: ");
+
                                 addAntecedent(patientConnect, antecedent);
                                 break;
                             case '4':
                                 console.clear();
                                 console.log("Faire une demande de rendez-vous");
-                                let specialite = readlineSync.question("Veuillez entrer la specialite medicale: ");
+
+                                let specialite = prompt("Veuillez entrer la specialite medicale: ");
+
+                                // let specialite = readlineSync.question("Veuillez entrer la specialite medicale: ");
+
                                 let demande = createDemandeRDV(patientConnect.id, specialite);
                                 registerDemandeRDV(demande);
                                 console.log("Demande de rendez-vous enregistree avec succes!");
@@ -148,9 +179,17 @@ export function main() {
                             case '7':
                                 console.clear();
                                 console.log("Changer le statut d'une demande de rendez-vous");
-                                let demandeId = parseInt(readlineSync.question("Veuillez entrer l'ID de la demande de rendez-vous: "));
+
+                                let demandeId = parseInt(prompt("Veuillez entrer l'ID de la demande de rendez-vous: "));
+
+                                // let demandeId = parseInt(readlineSync.question("Veuillez entrer l'ID de la demande de rendez-vous: "));
+
                                 let demandeTrouvee = serchDemandeById(demandeId);
-                                let statut = readlineSync.question("Veuillez entrer le nouveau statut (accepte/refuse/en attente): ");
+
+                                let statut = prompt("Veuillez entrer le nouveau statut (accepte/refuse/en attente): ");
+
+                                // let statut = readlineSync.question("Veuillez entrer le nouveau statut (accepte/refuse/en attente): ");
+
                                 if (demandeTrouvee) {
                                     changeDemandeStatut(demandeTrouvee, statut);
                                     console.log("Statut de la demande de rendez-vous mis à jour avec succès.");
